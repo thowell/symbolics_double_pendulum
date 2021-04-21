@@ -79,7 +79,6 @@ ddL = Symbolics.hessian(L, [q; q̇], simplify = true)
 # mass matrix
 M = ddL[n .+ (1:n), n .+ (1:n)]
 M = simplify.(M)
-M_exp = Symbolics.build_function(M, q)
 
 # dynamics bias
 C = ddL[n .+ (1:n), 1:n] * q̇ - dLq
@@ -111,6 +110,7 @@ prob = ODEProblem(dynamics!, x0, tspan)
 sol = solve(prob, Tsit5(), adaptive = false, dt = dt)
 
 # MeshCat.jl
+include(joinpath(pwd(), "visuals.jl"))
 vis = Visualizer()
 render(vis)
 visualize_double_pendulum!(vis, model, sol.u, Δt = dt)
